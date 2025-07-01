@@ -1,0 +1,82 @@
+{
+  "workflows": [
+    {
+      "name": "Gmail to Slack Notification",
+      "description": "Send a Slack message whenever a new Gmail email arrives.",
+      "nodes": [
+        {
+          "parameters": {
+            "pollTimes": { "item": [{ "mode": "everyMinute" }] }
+          },
+          "id": "gmail-trigger",
+          "name": "Gmail Trigger",
+          "type": "n8n-nodes-base.gmailTrigger",
+          "typeVersion": 1,
+          "position": [240, 300]
+        },
+        {
+          "parameters": {
+            "channel": "#general",
+            "text": "New email: {{$node[\"Gmail Trigger\"].json[\"subject\"]}}"
+          },
+          "id": "slack-node",
+          "name": "Slack",
+          "type": "n8n-nodes-base.slack",
+          "typeVersion": 1,
+          "position": [460, 300]
+        }
+      ],
+      "connections": {
+        "Gmail Trigger": {
+          "main": [[{ "node": "Slack", "type": "main", "index": 0 }]]
+        }
+      },
+      "active": false,
+      "settings": {}
+    },
+    {
+      "name": "CSV to Google Sheets",
+      "description": "Upload a CSV via webhook, parse it, and append rows to Google Sheets.",
+      "nodes": [
+        {
+          "parameters": { "httpMethod": "POST", "path": "csv-upload" },
+          "id": "webhook-node",
+          "name": "Webhook",
+          "type": "n8n-nodes-base.webhook",
+          "typeVersion": 1,
+          "position": [240, 300]
+        },
+        {
+          "parameters": { "operation": "toFile", "fileFormat": "csv" },
+          "id": "csv-node",
+          "name": "Read CSV",
+          "type": "n8n-nodes-base.readBinaryFile",
+          "typeVersion": 1,
+          "position": [460, 300]
+        },
+        {
+          "parameters": {
+            "operation": "append",
+            "documentId": "your-sheet-id",
+            "sheetName": "Sheet1"
+          },
+          "id": "sheets-node",
+          "name": "Google Sheets",
+          "type": "n8n-nodes-base.googleSheets",
+          "typeVersion": 1,
+          "position": [680, 300]
+        }
+      ],
+      "connections": {
+        "Webhook": {
+          "main": [[{ "node": "Read CSV", "type": "main", "index": 0 }]]
+        },
+        "Read CSV": {
+          "main": [[{ "node": "Google Sheets", "type": "main", "index": 0 }]]
+        }
+      },
+      "active": false,
+      "settings": {}
+    }
+  ]
+}
