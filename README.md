@@ -1,166 +1,133 @@
-# n8n Workflow Builder
+# 🚀 n8n Workflow Builder
 
-AI-powered tool to generate **n8n** workflows from natural language prompts, leveraging a database of real workflows, vector search, and open LLMs.
+> **Turn natural language into fully functional [n8n](https://n8n.io) automations — instantly.**
 
----
-
-## 🚀 What is this?
-
-**n8n Workflow Builder** lets you describe an automation in plain English and instantly generates a production-ready [n8n](https://n8n.io/) workflow. It finds similar workflows from a curated database and uses AI to generate or adapt flows for your use case.
+**n8n Workflow Builder** is an AI-powered interface that transforms prompts into production-ready workflows. It leverages a rich, curated library of real automations and enables developers and non-technical users alike to build powerful integrations without writing code.
 
 ---
 
 ## ✨ Features
 
-- **Natural Language Input:** Just describe the desired workflow; no coding needed.
-- **Vector Search:** Retrieves similar workflows from a 3,000+ real-world workflow database.
-- **AI Generation:** Uses OpenRouter & open-source LLMs (Mistral-7B, etc.) to create new flows.
-- **Modern UI:** Fast, responsive frontend with Next.js 14, Tailwind CSS, and shadcn/ui.
-- **Open Source:** Fully customizable, extensible, and MIT-licensed.
-- **Easy Deploy:** Ready for Vercel and local deployment.
+- 🧠 **AI-Powered Prompting**: Describe what you want, and let the AI build the workflow.
+- 🔍 **Real Automation Library**: Generates workflows based on a growing database of real-world use cases.
+- 🎨 **Instant Visual Feedback**: Preview and modify workflows before publishing.
+- ⚡ **Export to n8n**: Deploy directly or copy JSON to your local/self-hosted n8n instance.
+- 🧩 **Pluggable**: Easily extend with custom nodes or workflow patterns.
 
 ---
 
-## 🏗️ Architecture
+## 🧪 Live Preview
 
-```
-Frontend (Next.js)
-   │
-   ▼
-Backend (Express)
-   │
-   ▼
-Vector DB (ChromaDB)
-```
+Try it live: **[n8n-workflow-builder.vercel.app](https://n8n-workflow-builder.vercel.app/)**  
+_(Instantly generate production-ready n8n workflows in your browser.)_
 
-- **Frontend:** User input, display, download.
-- **Backend:** API, vector search, LLM integration.
-- **Vector DB:** ChromaDB for similarity search.
+Uses AI prompt generation + a curated database of real-world automations from:  
+👉 **[Ultimate n8n AI Workflows](https://github.com/oxbshw/-ultimate-n8n-ai-workflows)**
 
 ---
 
-## 📦 Tech Stack
+## 📦 Installation
 
-- **Frontend:** Next.js 14, Tailwind CSS, shadcn/ui
-- **Backend:** Node.js, Express
-- **Database:** ChromaDB (local or remote)
-- **AI:** OpenRouter (Mistral-7B-Instruct)
-- **Deployment:** Vercel, Docker, or any Node.js host
-
----
-
-## ⚡️ Quickstart
-
-### Prerequisites
-
-- Node.js 18+
-- Yarn or npm
-- Python 3 (for ChromaDB)
-- [OpenRouter](https://openrouter.ai/) API key
-
-### 1. Clone & Install
+Clone the repo:
 
 ```bash
 git clone https://github.com/oxbshw/n8n-workflow-builder.git
 cd n8n-workflow-builder
-cd backend && npm install
-cd ../frontend && npm install
 ```
 
-### 2. Configure
+Install dependencies:
 
 ```bash
-cd ../backend
+pnpm install
+```
+
+Start the development server:
+
+```bash
+pnpm dev
+```
+
+---
+
+## 🧠 How It Works
+
+1. **You Describe**  
+   > _"Send a Slack message when a new row is added in Google Sheets."_
+
+2. **AI Builds Workflow**  
+   The AI fetches components from the automation library, adapts them, and assembles a workflow.
+
+3. **You Preview & Export**  
+   Modify, fine-tune, or download your ready-to-run n8n JSON.
+
+---
+
+## 📁 Project Structure
+
+```
+.
+├── app/            # Frontend logic (Next.js)
+├── lib/            # Workflow templates and helpers
+├── api/            # Serverless endpoints (e.g., AI generation)
+└── public/         # Static assets
+```
+
+---
+
+## 🔐 Environment Variables
+
+Copy `.env.example` and configure your own:
+
+```bash
 cp .env.example .env
-# Edit .env with your OpenRouter API key and ChromaDB URL
 ```
 
-### 3. Start ChromaDB
-
-```bash
-pip install chromadb
-chroma run --host localhost --port 8000
-```
-
-### 4. Build Embeddings
-
-```bash
-cd backend
-npm run build-embeddings
-```
-
-### 5. Run the App
-
-```bash
-# Terminal 1
-cd backend && npm run dev
-
-# Terminal 2
-cd frontend && npm run dev
-```
-
-Visit [http://localhost:3000](http://localhost:3000)
+| Variable               | Description                         |
+|------------------------|-------------------------------------|
+| `OPENAI_API_KEY`       | API key for OpenAI (workflow generation) |
+| `VERCEL_PROJECT_ID`    | (Optional) Used for Vercel integrations |
+| `N8N_HOST`             | Base URL of your n8n instance       |
 
 ---
 
-## 📝 Example API Usage
+## 🧱 Built With
 
-**POST** `/api/generate`
-
-```json
-{
-  "prompt": "Monitor Gmail and send Slack notifications"
-}
-```
-
-**Response:**
-```json
-{
-  "workflow": { ... },
-  "similarWorkflowsCount": 3,
-  "timestamp": "2025-07-01T00:00:00.000Z"
-}
-```
+- [n8n](https://n8n.io) – Workflow Automation
+- [Next.js](https://nextjs.org) – Web Framework
+- [Tailwind CSS](https://tailwindcss.com) – Styling
+- [OpenAI](https://openai.com) – Prompt-to-workflow engine
+- [Vercel](https://vercel.com) – Deployment
 
 ---
 
-## 🛠️ Customization
+## 🛣 Roadmap
 
-- Add your own workflows: Place a `workflows.json` in `backend/data/` and run `npm run build-embeddings`.
-- Use a remote ChromaDB: Set `CHROMA_URL` in `.env`.
+- [ ] GitHub OAuth & Workflow Sharing
+- [ ] Public Workflow Gallery
+- [ ] Voice-Prompt Support (via ElevenLabs)
+- [ ] Workflow Deployment to Cloud-hosted n8n
 
 ---
 
 ## 🤝 Contributing
 
-1. Fork the repo
-2. Create a branch: `git checkout -b feature/my-feature`
-3. Commit: `git commit -m "Add my feature"`
-4. Push: `git push origin feature/my-feature`
-5. Open a Pull Request
+Pull requests are welcome! For major changes, please open an issue first to discuss the idea.
+
+To contribute:
+
+```bash
+git checkout -b feature/your-feature
+pnpm dev
+```
 
 ---
 
 ## 📄 License
 
-MIT © [oxbshw](https://github.com/oxbshw)
+[MIT](./LICENSE)
 
 ---
 
-## 🙏 Acknowledgments
+## 🙋‍♀️ Questions?
 
-- [n8n](https://n8n.io/)
-- [OpenRouter](https://openrouter.ai/)
-- [ChromaDB](https://www.trychroma.com/)
-- [Vercel](https://vercel.com/)
-
----
-
-## 💬 Support
-
-- [GitHub Issues](https://github.com/oxbshw/n8n-workflow-builder/issues)
-- Community discussions tab
-
----
-
-_Made with ❤️ for the automation community_
+Open an [issue](https://github.com/oxbshw/n8n-workflow-builder/issues) or reach out via [X/Twitter](https://twitter.com/oxbshw).
